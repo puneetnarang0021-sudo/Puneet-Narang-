@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Clock, ChevronDown, ChevronUp, Send, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Clock, ChevronDown, ChevronUp, Send, CheckCircle2, ShieldCheck, ExternalLink } from 'lucide-react';
+import {
+  dispatchLeadDirectly,
+  getWhatsAppUrl,
+  getEmailUrl,
+  GOOGLE_FORM_URL,
+  OFFICIAL_PHONE,
+  OFFICIAL_EMAIL,
+} from '../utils/leadDispatch';
 
 interface ContactSectionProps {
   onOpenDemo: () => void;
@@ -42,11 +50,25 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
     message: '',
   });
 
+  const leadPayload = {
+    type: 'Counseling Request' as const,
+    name: formData.name,
+    phone: formData.phone,
+    email: formData.email,
+    message: formData.message,
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+
+    // Instant direct dispatch to Trader Punit Narang's WhatsApp (9999633109)
+    dispatchLeadDirectly(leadPayload);
     setFormSubmitted(true);
   };
+
+  const whatsappUrl = getWhatsAppUrl(leadPayload);
+  const emailUrl = getEmailUrl(leadPayload);
 
   return (
     <section id="contact" className="py-16 sm:py-24 bg-neutral-950 relative border-t border-neutral-800">
@@ -70,7 +92,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
             {/* Contact Cards */}
             <div className="space-y-3.5">
               <a
-                href="tel:9999633109"
+                href={`tel:${OFFICIAL_PHONE}`}
                 className="flex items-center gap-4 p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 hover:border-amber-400/50 transition-colors group"
               >
                 <div className="w-11 h-11 rounded-xl bg-amber-400/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
@@ -79,13 +101,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
                 <div>
                   <p className="text-xs text-neutral-400">Direct Contact Number / Call Desk</p>
                   <p className="text-base font-bold text-white group-hover:text-amber-400 transition-colors">
-                    +91 9999633109
+                    +91 {OFFICIAL_PHONE}
                   </p>
                 </div>
               </a>
 
               <a
-                href="https://wa.me/919999633109?text=Hello%20Trader%20Punit%20Narang,%20I%20want%20to%20know%20more%20about%20Balance%20Bull%20Academy."
+                href={`https://wa.me/91${OFFICIAL_PHONE}?text=Hello%20Trader%20Punit%20Narang,%20I%20want%20to%20know%20more%20about%20Balance%20Bull%20Academy.`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 hover:border-emerald-400/50 transition-colors group"
@@ -96,13 +118,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
                 <div>
                   <p className="text-xs text-neutral-400">WhatsApp Quick Chat</p>
                   <p className="text-base font-bold text-emerald-400 group-hover:text-emerald-300 transition-colors">
-                    +91 9999633109
+                    +91 {OFFICIAL_PHONE}
                   </p>
                 </div>
               </a>
 
               <a
-                href="mailto:PuneetNarang0021@gmail.com"
+                href={`mailto:${OFFICIAL_EMAIL}`}
                 className="flex items-center gap-4 p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 hover:border-amber-400/50 transition-colors group"
               >
                 <div className="w-11 h-11 rounded-xl bg-amber-400/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
@@ -111,7 +133,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
                 <div className="overflow-hidden">
                   <p className="text-xs text-neutral-400">Official Email Inquiries</p>
                   <p className="text-sm sm:text-base font-bold text-white group-hover:text-amber-400 transition-colors truncate">
-                    PuneetNarang0021@gmail.com
+                    {OFFICIAL_EMAIL}
                   </p>
                 </div>
               </a>
@@ -130,7 +152,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
 
               {/* Official Google Form Direct Card */}
               <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSddlnDkVU2miFiXhcbLD21qYgdK0SyXiSm4boljdK03sVyPtA/viewform?usp=header"
+                href={GOOGLE_FORM_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/40 hover:bg-amber-500/20 transition-all group"
@@ -151,35 +173,67 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
           {/* Right Column: Instant Message / Callback Form */}
           <div className="lg:col-span-7 bg-neutral-900/90 border border-neutral-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
             {formSubmitted ? (
-              <div className="text-center py-10 space-y-4">
+              <div className="text-center py-8 space-y-4">
                 <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Thank You, {formData.name}!</h3>
-                <p className="text-neutral-300 text-sm max-w-md mx-auto">
-                  Your inquiry has been received. Trader Punit Narang’s counseling team will call you at{' '}
-                  <strong className="text-amber-400">{formData.phone}</strong> shortly.
-                </p>
-                <div className="pt-2">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-bold text-emerald-400">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Direct Message Sent to {OFFICIAL_PHONE}
+                  </span>
+                  <h3 className="text-xl font-bold text-white mt-2">Inquiry Dispatched Directly!</h3>
+                  <p className="text-neutral-300 text-sm max-w-md mx-auto mt-1 leading-relaxed">
+                    Thank you, <strong className="text-white">{formData.name}</strong>. Your message was sent straight to <strong className="text-amber-400">Trader Punit Narang’s personal desk ({OFFICIAL_PHONE})</strong>.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-950 border border-neutral-800 text-left space-y-3">
                   <a
-                    href={`https://wa.me/919999633109?text=Hi%20Punit%20Sir,%20I%20just%20submitted%20the%20contact%20form%20for%20Balance%20Bull%20Academy%20under%20the%20name%20${encodeURIComponent(
-                      formData.name
-                    )}.`}
+                    href={whatsappUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-colors"
+                    className="w-full py-3 px-4 rounded-xl font-bold text-xs text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Connect Immediately on WhatsApp</span>
+                    <MessageCircle className="w-4 h-4 fill-neutral-950" />
+                    <span>Open / Resend WhatsApp Directly ({OFFICIAL_PHONE})</span>
                   </a>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <a
+                      href={emailUrl}
+                      className="py-2.5 px-3 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-amber-400 text-neutral-200 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Send Backup Email</span>
+                    </a>
+
+                    <a
+                      href={GOOGLE_FORM_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="py-2.5 px-3 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-amber-400 text-amber-400 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Open Google Form</span>
+                    </a>
+                  </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => setFormSubmitted(false)}
+                  className="text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer pt-2"
+                >
+                  Send Another Inquiry
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <h3 className="text-lg font-bold text-white">Request a Callback / Counseling</h3>
                   <p className="text-xs text-neutral-400 mt-1">
-                    Fill in your details below and our team will get in touch to assist with syllabus, batch timings, and demo classes.
+                    Fill in your details below to directly message Trader Punit Narang on WhatsApp ({OFFICIAL_PHONE}).
                   </p>
                 </div>
 
@@ -199,13 +253,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-neutral-300">
-                      Mobile Number (WhatsApp) *
+                    <label className="text-xs font-semibold text-neutral-300 flex items-center justify-between">
+                      <span>Mobile (WhatsApp) *</span>
+                      <span className="text-[10px] text-emerald-400">Direct to {OFFICIAL_PHONE}</span>
                     </label>
                     <input
                       type="tel"
                       required
-                      placeholder="e.g. 9999633109"
+                      placeholder="e.g. 9876543210"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-3.5 py-2.5 text-sm text-white focus:border-amber-400 focus:outline-none"
@@ -241,11 +296,27 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-neutral-950 bg-amber-400 hover:bg-amber-300 transition-colors shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-neutral-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Request to Trader Punit Narang</span>
+                  <Send className="w-4 h-4 text-neutral-950" />
+                  <span>Send Direct Message to Trader Punit Narang ({OFFICIAL_PHONE})</span>
                 </button>
+
+                <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Direct to {OFFICIAL_PHONE}
+                  </span>
+                  <a
+                    href={GOOGLE_FORM_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-amber-400 hover:underline flex items-center gap-1"
+                  >
+                    <span>Google Form</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </form>
             )}
           </div>
