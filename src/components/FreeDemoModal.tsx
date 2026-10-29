@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, MapPin, CheckCircle, MessageCircle, Phone, Sparkles, ShieldCheck, Mail, ExternalLink, Send } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, MessageCircle, Phone, Sparkles, ShieldCheck, Mail, ExternalLink, ArrowRight } from 'lucide-react';
 import type { DemoBooking } from '../types';
 import { dispatchLeadDirectly, getWhatsAppUrl, getEmailUrl, GOOGLE_FORM_URL, OFFICIAL_PHONE, OFFICIAL_EMAIL } from '../utils/leadDispatch';
 
@@ -9,8 +9,7 @@ interface FreeDemoModalProps {
 }
 
 export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose }) => {
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
   const [booking, setBooking] = useState<DemoBooking>({
     fullName: '',
     mobile: '',
@@ -32,21 +31,17 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
     experience: booking.experience,
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSendWhatsApp = (e: React.FormEvent) => {
     e.preventDefault();
     if (!booking.fullName || !booking.mobile) return;
 
-    setIsSubmitting(true);
-
-    // Instant direct dispatch to Trader Punit Narang's WhatsApp (9999633109)
+    // Direct WhatsApp message trigger directly to Trader Punit Narang (9999633109)
     dispatchLeadDirectly(leadPayload);
-
-    setIsSubmitting(false);
-    setSubmitted(true);
+    setMessageSent(true);
   };
 
   const handleReset = () => {
-    setSubmitted(false);
+    setMessageSent(false);
     onClose();
   };
 
@@ -55,7 +50,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-lg bg-neutral-950 border border-amber-500/40 rounded-2xl shadow-2xl p-5 sm:p-7 my-6 text-neutral-100">
+      <div className="relative w-full max-w-lg bg-neutral-950 border border-emerald-500/40 rounded-2xl shadow-2xl p-5 sm:p-7 my-6 text-neutral-100">
         {/* Close Button */}
         <button
           onClick={handleReset}
@@ -65,27 +60,27 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
           <X className="w-5 h-5" />
         </button>
 
-        {submitted ? (
-          /* Confirmation View - Explicit notification that message was sent directly */
+        {messageSent ? (
+          /* Post-Click Screen - Direct WhatsApp Confirmation (No "booked" claim) */
           <div className="text-center space-y-4 py-2">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto">
-              <CheckCircle className="w-8 h-8" />
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto animate-pulse">
+              <MessageCircle className="w-8 h-8 fill-emerald-400 text-neutral-950" />
             </div>
 
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-bold text-emerald-400 tracking-wide">
-                <CheckCircle className="w-3.5 h-3.5" />
-                Direct Message Dispatched to 9999633109
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                WhatsApp Message Dispatched to {OFFICIAL_PHONE}
               </span>
               <h3 className="text-xl sm:text-2xl font-extrabold text-white mt-2">
-                Demo Class Registered!
+                Connecting with Trader Punit Narang
               </h3>
               <p className="text-xs text-neutral-300 mt-1.5 leading-relaxed">
-                Thank you, <strong className="text-white">{booking.fullName}</strong>. Your registration has been sent directly to <strong className="text-amber-400">Trader Punit Narang’s personal WhatsApp desk ({OFFICIAL_PHONE})</strong> for immediate confirmation.
+                Hello <strong className="text-white">{booking.fullName}</strong>! Your demo session details are ready to send directly to Trader Punit Narang on WhatsApp (<strong className="text-emerald-400">{OFFICIAL_PHONE}</strong>).
               </p>
             </div>
 
-            {/* Registration Details Summary Card */}
+            {/* Session Summary Card */}
             <div className="p-3.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-left space-y-2 text-xs">
               <div className="flex items-center justify-between text-neutral-400 pb-1.5 border-b border-neutral-800">
                 <span>Selected Mode:</span>
@@ -94,34 +89,29 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
                 </span>
               </div>
               <div className="flex items-center justify-between text-neutral-400 pb-1.5 border-b border-neutral-800">
-                <span>Session Slot:</span>
+                <span>Preferred Slot:</span>
                 <span className="font-semibold text-amber-400">{booking.slot}</span>
               </div>
               <div className="flex items-center justify-between text-neutral-400">
-                <span>Registered Phone:</span>
+                <span>Your Phone:</span>
                 <span className="font-mono font-semibold text-white">{booking.mobile}</span>
               </div>
             </div>
 
-            {/* Direct Multi-Channel Connect Options */}
-            <div className="p-4 rounded-xl bg-neutral-900 border border-amber-500/30 space-y-2.5 text-left">
-              <div className="flex items-center gap-2 text-xs font-semibold text-amber-400">
-                <ShieldCheck className="w-4 h-4 shrink-0" />
-                <span>Instant Connect &amp; Backup Channels</span>
-              </div>
-              <p className="text-[11px] text-neutral-400">
-                WhatsApp was opened automatically. If your browser blocked the window or you need to re-open the chat, tap below:
+            {/* Direct WhatsApp Big Action Button */}
+            <div className="p-4 rounded-xl bg-neutral-900 border border-emerald-500/30 space-y-2.5 text-left">
+              <p className="text-[11px] text-neutral-300 text-center">
+                If WhatsApp didn't open automatically, tap below to chat directly with Punit Sir:
               </p>
 
-              {/* Primary Direct WhatsApp Action */}
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl font-extrabold text-sm text-neutral-950 bg-emerald-400 hover:bg-emerald-300 transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/30 active:scale-[0.98] cursor-pointer"
               >
-                <MessageCircle className="w-4 h-4 fill-neutral-950" />
-                <span>Open / Send WhatsApp Direct ({OFFICIAL_PHONE})</span>
+                <MessageCircle className="w-5 h-5 fill-neutral-950" />
+                <span>Open WhatsApp Direct ({OFFICIAL_PHONE})</span>
               </a>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -131,7 +121,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
                   className="py-2.5 px-3 rounded-lg bg-neutral-950 border border-neutral-800 hover:border-amber-400/50 text-neutral-200 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
                 >
                   <Mail className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Send Copy to Email</span>
+                  <span>Send via Email</span>
                 </a>
 
                 {/* Google Form Option */}
@@ -152,7 +142,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
                 className="w-full py-2 px-3 rounded-lg text-neutral-300 hover:text-white text-xs font-medium flex items-center justify-center gap-2 transition-colors"
               >
                 <Phone className="w-3.5 h-3.5 text-amber-400" />
-                <span>Need immediate help? Call {OFFICIAL_PHONE}</span>
+                <span>Or Call Direct: +91 {OFFICIAL_PHONE}</span>
               </a>
             </div>
 
@@ -160,26 +150,26 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
               onClick={handleReset}
               className="text-xs font-medium text-neutral-400 hover:text-white transition-colors cursor-pointer pt-1"
             >
-              Done / Return to Website
+              Close / Return to Website
             </button>
           </div>
         ) : (
-          /* Form View */
-          <form onSubmit={handleSubmit} className="space-y-4">
+          /* Main Form View with Direct WhatsApp Button */
+          <form onSubmit={handleSendWhatsApp} className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                <Sparkles className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <MessageCircle className="w-5 h-5 fill-emerald-400 text-neutral-950" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Book Free Live Demo Class</h3>
-                <p className="text-xs text-amber-400 font-medium">
-                  Direct Submission to Trader Punit Narang ({OFFICIAL_PHONE})
+                <h3 className="text-lg font-bold text-white">Free Live Demo Class</h3>
+                <p className="text-xs text-emerald-400 font-medium">
+                  Direct WhatsApp to Trader Punit Narang ({OFFICIAL_PHONE})
                 </p>
               </div>
             </div>
 
             <p className="text-xs text-neutral-400 leading-relaxed">
-              Experience our live market Price Action &amp; Option strategies. Submitting this form directly notifies Trader Punit Narang via WhatsApp and Email instantly.
+              Fill in your details below and tap the WhatsApp button to message Trader Punit Narang directly for demo timing and batch availability.
             </p>
 
             {/* Mode Selection */}
@@ -304,20 +294,24 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
               </select>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-neutral-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] cursor-pointer mt-2 flex items-center justify-center gap-2"
-            >
-              <Send className="w-4 h-4 text-neutral-950" />
-              <span>Confirm &amp; Send Directly to Punit Narang (9999633109)</span>
-            </button>
+            {/* DIRECT WHATSAPP SUBMIT BUTTON */}
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full py-3.5 px-4 rounded-xl font-extrabold text-sm sm:text-base text-neutral-950 bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-400 hover:from-emerald-300 hover:to-emerald-400 transition-all shadow-xl shadow-emerald-500/25 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2.5"
+              >
+                <MessageCircle className="w-5 h-5 fill-neutral-950 text-neutral-950 shrink-0" />
+                <span>Send on WhatsApp to Trader Punit Narang ({OFFICIAL_PHONE})</span>
+              </button>
+              <p className="text-[11px] text-center text-neutral-400 mt-2">
+                Clicking opens WhatsApp directly with your details to send to <strong className="text-white">+91 {OFFICIAL_PHONE}</strong>
+              </p>
+            </div>
 
-            <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
+            <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1 border-t border-neutral-900">
               <span className="flex items-center gap-1 text-emerald-400">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                Instant message directly to 9999633109
+                Direct to Trader Punit Narang
               </span>
               <a
                 href={GOOGLE_FORM_URL}
@@ -325,7 +319,7 @@ export const FreeDemoModal: React.FC<FreeDemoModalProps> = ({ isOpen, onClose })
                 rel="noreferrer"
                 className="text-amber-400 hover:underline flex items-center gap-1"
               >
-                <span>Google Form</span>
+                <span>Or use Google Form</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>

@@ -103,11 +103,11 @@ export const LeadPopupModal: React.FC<LeadPopupModalProps> = ({ isOpen, onClose 
               <div>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-bold text-emerald-400">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  Direct Message Dispatched to {OFFICIAL_PHONE}
+                  WhatsApp Opened for Direct Chat ({OFFICIAL_PHONE})
                 </span>
-                <h4 className="text-xl font-bold text-white mt-2">Inquiry Submitted Successfully!</h4>
+                <h4 className="text-xl font-bold text-white mt-2">Connecting with Trader Punit Narang</h4>
                 <p className="text-xs text-neutral-300 mt-1 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong className="text-white">{formData.name}</strong>. Your inquiry has been sent directly to <strong className="text-amber-400">Trader Punit Narang’s personal WhatsApp ({OFFICIAL_PHONE})</strong>.
+                  Thank you, <strong className="text-white">{formData.name}</strong>. Your inquiry has been prepared for <strong className="text-emerald-400">Trader Punit Narang’s personal WhatsApp ({OFFICIAL_PHONE})</strong>.
                 </p>
               </div>
 
@@ -333,10 +333,10 @@ export const LeadPopupModal: React.FC<LeadPopupModalProps> = ({ isOpen, onClose 
               {/* Direct Submit CTA */}
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-neutral-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl font-extrabold text-xs sm:text-sm text-neutral-950 bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-400 hover:from-emerald-300 hover:to-emerald-400 shadow-xl shadow-emerald-500/25 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Send className="w-4 h-4 text-neutral-950" />
-                <span>Submit &amp; Send Direct Message to {OFFICIAL_PHONE}</span>
+                <MessageCircle className="w-4 h-4 fill-neutral-950 text-neutral-950" />
+                <span>Send on WhatsApp to Trader Punit Narang ({OFFICIAL_PHONE})</span>
               </button>
 
               <div className="pt-1 flex items-center justify-between text-[11px] text-neutral-400">

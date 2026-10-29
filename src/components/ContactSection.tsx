@@ -296,10 +296,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenDemo }) =>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-neutral-950 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl font-extrabold text-sm sm:text-base text-neutral-950 bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-400 hover:from-emerald-300 hover:to-emerald-400 transition-all shadow-xl shadow-emerald-500/25 active:scale-[0.98] flex items-center justify-center gap-2.5 cursor-pointer"
                 >
-                  <Send className="w-4 h-4 text-neutral-950" />
-                  <span>Send Direct Message to Trader Punit Narang ({OFFICIAL_PHONE})</span>
+                  <MessageCircle className="w-5 h-5 fill-neutral-950 text-neutral-950" />
+                  <span>Send on WhatsApp to Trader Punit Narang ({OFFICIAL_PHONE})</span>
                 </button>
 
                 <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
