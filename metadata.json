@@ -1,0 +1,8 @@
+{
+  "name": "Remix Balance Bull Academy by Trader Punit Narang",
+  "description": "Premier stock market institute and trading mentorship academy led by Trader Punit Narang. Master Price Action, Nifty \u0026 BankNifty Option Strategies, and Live Market Trading.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
